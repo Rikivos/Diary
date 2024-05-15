@@ -2,13 +2,21 @@ from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient
 import os
 from datetime import datetime
+from os.path import join, dirname
+from dotenv import load_dotenv
 
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
+
+client = MongoClient(MONGODB_URI)
+
+db = client[DB_NAME]
 app = Flask(__name__)
 
 # Connect to MongoDB
-connection_string = 'mongodb+srv://test:sparta@cluster0.oxreacg.mongodb.net'
-client = MongoClient(connection_string)
-db = client.Movies
 diary_collection = db.diary  
 
 @app.route('/')
